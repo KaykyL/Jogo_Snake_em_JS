@@ -1,1 +1,1 @@
-#Jogo "Snake" recriado em HTML, JS e CSS
+# Jogo "Snake" recriado em HTML, JS e CSS
