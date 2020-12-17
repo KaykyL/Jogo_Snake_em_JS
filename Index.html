@@ -21,9 +21,12 @@
     <div class="game">
         <canvas id="snake" width="512" height="512"></canvas>
         <div class="hud">
+            <h2 id="score-title">Score:</h2>
             <h1 id="score">0</h1>
-            <Button class="hud-button">Restart</Button>
-
+            <Button class="hud-button" onclick="restartGame()">Restart</Button>
+        </div>
+        <div id="gameover-screen">
+            <h1 id="gameover-title">GAME OVER</h1>
         </div>
     </div>
 </body>
