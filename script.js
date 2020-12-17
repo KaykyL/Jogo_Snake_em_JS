@@ -1,31 +1,46 @@
 let canvas = document.getElementById("snake")
 let context = canvas.getContext("2d")
+let scoreText = document.getElementById("score")
+
+let score = 0
+let trueScore = 0
+let scoreColor = 0
+let scoreSize = 100
+
 let box = 32
 let snake = []
+let eatInterval
+
+
 snake[0] = {
     x: 8 * box,
     y: 8 * box
 }
 let direction = "right";
+
+function lerp(start, end, amt) {
+    return (1 - amt) * start + amt * end
+}
+
 let food = {
     x: Math.floor(Math.random() * 15 + 1) * box,
     y: Math.floor(Math.random() * 15 + 1) * box
 }
 
 function makeBG() {
-    context.fillStyle = "lightgreen"
+    context.fillStyle = "lightgrey"
     context.fillRect(0, 0, 16 * box, 16 * box)
 }
 
 function createSnake() {
     for (i = 0; i < snake.length; i++) {
-        context.fillStyle = 'green'
+        context.fillStyle = 'orange'
         context.fillRect(snake[i].x, snake[i].y, box, box)
     }
 }
 
 function drawFood() {
-    context.fillStyle = "red"
+    context.fillStyle = "dimgray"
     context.fillRect(food.x, food.y, box, box)
 }
 
@@ -38,6 +53,28 @@ function update(event) {
     if (event.keyCode == 40 && direction != 'up') direction = 'down'
 }
 
+function eat() {
+    clearInterval(eat)
+    trueScore += 10
+
+    scoreColor = 255
+    scoreSize = 135
+    eatInterval = setInterval(updateScore, 100)
+}
+
+function updateScore() {
+    score = lerp(score, trueScore + 1, 0.1)
+    scoreColor = lerp(scoreColor, 0, 0.1)
+    scoreSize = lerp(scoreSize, 100, 0.1)
+
+    scoreText.innerHTML = Math.floor(score).toString()
+    scoreText.style["font-size"] = scoreSize + "px"
+    scoreText.style["color"] = "rgba(" + scoreColor + ", " + scoreColor + ", " + scoreColor + ", " + 1 + ")"
+
+    if (score >= trueScore) {
+        clearInterval(eatInterval)
+    }
+}
 
 function startGame() {
     if (snake[0].x > 15 * box && direction == 'right') snake[0].x = 0;
@@ -69,6 +106,7 @@ function startGame() {
     if (snakeX != food.x || snakeY != food.y) {
         snake.pop()
     } else {
+        eat()
         food.x = Math.floor(Math.random() * 15 + 1) * box
         food.y = Math.floor(Math.random() * 15 + 1) * box
     }
